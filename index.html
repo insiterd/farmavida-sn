@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienestar & Belleza | Farmacia Natural</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="farmavidalogo.jpeg">
+    <link rel="shortcut icon" type="image/jpeg" href="farmavidalogo.jpeg">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Raleway (Elegante/Fina) & Quicksand (Amigable/Tierna) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&family=Raleway:wght@100;200;300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                        serif: ['Raleway', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            primary: '#5ea8a7', // Soft Teal (Salud)
+                            secondary: '#fce7f3', // Pale Pink (Belleza/Ternura)
+                            accent: '#ec4899', // Pink Accent
+                            text: '#475569', // Slate 600
+                            light: '#f8fafc', // Slate 50
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(0,0,0,0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Estilos personalizados para suavidad */
+        body {
+            background-color: #fcfcfc;
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .product-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Animación suave del carrito */
+        .cart-overlay {
+            transition: opacity 0.3s ease-in-out, visibility 0.3s;
+        }
+        
+        .cart-sidebar {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .hidden-cart .cart-sidebar {
+            transform: translateX(100%);
+        }
+        
+        .hidden-cart {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* Scrollbar bonito */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
+</head>
+<body class="text-brand-text font-sans antialiased selection:bg-brand-primary selection:text-white">
+
+    <!-- Navbar Flotante -->
+    <nav class="fixed w-full z-40 top-0 transition-all duration-300 glass-panel border-b border-gray-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center gap-2 group cursor-pointer">
+                    <div class="w-10 h-10 rounded-full overflow-hidden group-hover:scale-110 transition-transform">
+                        <img src="farmavidalogo.jpeg" alt="Farmavida Logo" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h1 class="font-serif text-2xl font-light tracking-wide text-gray-800">Farma<span class="font-bold text-brand-primary">Vida</span></h1>
+                    </div>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#inicio" class="text-sm font-medium hover:text-brand-primary transition-colors">Inicio</a>
+                    <a href="#nosotros" class="text-sm font-medium hover:text-brand-primary transition-colors">Nosotros</a>
+                    <a href="#productos" class="text-sm font-medium hover:text-brand-primary transition-colors">Tienda</a>
+                </div>
+
+                <!-- Cart Button -->
+                <button onclick="toggleCart()" class="relative p-2 hover:bg-gray-50 rounded-full transition-colors group">
+                    <i data-lucide="shopping-bag" class="w-6 h-6 text-gray-600 group-hover:text-brand-primary transition-colors"></i>
+                    <span id="cart-count" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-brand-accent rounded-full opacity-0 transition-opacity">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="relative pt-32 pb-20 overflow-hidden bg-gradient-to-br from-white via-teal-50/30 to-pink-50/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2 text-center md:text-left space-y-6">
+                    <span class="inline-block px-4 py-1 rounded-full bg-teal-100 text-teal-700 text-xs font-bold tracking-widest uppercase mb-2">Cuidado Integral</span>
+                    <h2 class="font-serif text-5xl md:text-6xl font-thin text-gray-800 leading-tight">
+                        Tu belleza nace de tu <br/>
+                        <span class="font-normal text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-brand-accent">Bienestar Interior</span>
+                    </h2>
+                    <p class="text-lg text-gray-500 font-light leading-relaxed max-w-lg mx-auto md:mx-0">
+                        Descubre productos confiables que armonizan tu salud física con tu belleza natural. Soluciones accesibles y cercanas para ti.
+                    </p>
+                    <div class="pt-4 flex justify-center md:justify-start gap-4">
+                        <a href="#productos" class="bg-brand-primary text-white px-8 py-3 rounded-full shadow-lg shadow-teal-200 hover:shadow-teal-300 hover:-translate-y-1 transition-all duration-300 font-medium tracking-wide">
+                            Ver Productos
+                        </a>
+                        <a href="#nosotros" class="bg-white text-gray-600 border border-gray-200 px-8 py-3 rounded-full hover:bg-gray-50 transition-all duration-300 font-medium tracking-wide">
+                            Conócenos
+                        </a>
+                    </div>
+                </div>
+                <!-- Imagen Hero -->
+                <div class="md:w-1/2 relative">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-brand-secondary to-teal-100 rounded-full blur-3xl opacity-60 animate-pulse"></div>
+                    <!-- Usamos la imagen subida 'imagen.jpg' como banner principal -->
+                    <img src="https://images.unsplash.com/photo-1580870069867-74c57ee1bb07?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"  
+                         alt="Productos de Salud" 
+                         class="relative z-10 w-full rounded-3xl shadow-soft object-cover h-[500px] border-4 border-white">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nosotros / Info del Negocio -->
+    <section id="nosotros" class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <i data-lucide="heart-handshake" class="w-12 h-12 text-brand-accent mx-auto mb-6 opacity-80"></i>
+            <h3 class="font-serif text-3xl text-gray-800 mb-8 font-light">Nuestro Compromiso</h3>
+            <p class="text-xl text-gray-500 font-light leading-relaxed mb-10">
+                "Somos una empresa dedicada a la venta de <strong class="text-brand-primary font-medium">productos saludables, vitaminas, suplementos y productos para la belleza</strong>, enfocada en el cuidado integral del buen estado y el bienestar."
+            </p>
+            <div class="grid md:grid-cols-3 gap-8 mt-12">
+                <div class="p-6 bg-brand-light rounded-2xl hover:bg-teal-50 transition-colors">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm text-brand-primary">
+                        <i data-lucide="shield-check" class="w-5 h-5"></i>
+                    </div>
+                    <h4 class="font-serif text-lg mb-2">Seguridad</h4>
+                    <p class="text-sm text-gray-500">Productos confiables que cuidan tu cuerpo.</p>
+                </div>
+                <div class="p-6 bg-brand-light rounded-2xl hover:bg-teal-50 transition-colors">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm text-brand-primary">
+                        <i data-lucide="smile" class="w-5 h-5"></i>
+                    </div>
+                    <h4 class="font-serif text-lg mb-2">Cercanía</h4>
+                    <p class="text-sm text-gray-500">Servicio amable pensando en ti.</p>
+                </div>
+                <div class="p-6 bg-brand-light rounded-2xl hover:bg-teal-50 transition-colors">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm text-brand-primary">
+                        <i data-lucide="sparkles" class="w-5 h-5"></i>
+                    </div>
+                    <h4 class="font-serif text-lg mb-2">Calidad</h4>
+                    <p class="text-sm text-gray-500">Mejora tu belleza y fortalece tu cuerpo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Productos -->
+    <section id="productos" class="py-24 bg-brand-light relative">
+        <!-- Decoración de fondo -->
+        <div class="absolute top-0 right-0 w-64 h-64 bg-pink-100 rounded-full blur-3xl opacity-50 -translate-y-1/2"></div>
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-teal-100 rounded-full blur-3xl opacity-50 translate-y-1/2"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <span class="text-brand-accent font-bold tracking-widest text-xs uppercase">Catálogo</span>
+                <h3 class="font-serif text-4xl text-gray-800 mt-2 font-light">Favoritos de Bienestar</h3>
+            </div>
+
+            <!-- Grid de Productos (Renderizado por JS) -->
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Los productos se insertan aquí -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-100 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-12 mb-12">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <i data-lucide="leaf" class="w-5 h-5 text-brand-primary"></i>
+                        <span class="font-serif text-xl font-medium text-gray-800">Bienestar<span class="text-brand-primary">Vital</span></span>
+                    </div>
+                    <p class="text-sm text-gray-500 font-light leading-relaxed">
+                        Tu tienda de confianza para un estilo de vida saludable y radiante. Cuidamos de ti con productos seleccionados con amor.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-serif text-gray-800 mb-4">Contacto</h4>
+                    <ul class="space-y-3 text-sm text-gray-500 font-light">
+                        <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-brand-primary"></i> Av. Salud 123, Ciudad</li>
+                        <li class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-brand-primary"></i> +1 234 567 8900</li>
+                        <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-brand-primary"></i> hola@bienestarvital.com</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-serif text-gray-800 mb-4">Síguenos</h4>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-brand-primary hover:text-white transition-all"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-brand-primary hover:text-white transition-all"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center text-xs text-gray-400 border-t border-gray-50 pt-8 font-light">
+                &copy; 2024 BienestarVital. Diseñado con cariño.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Sidebar & Overlay -->
+    <div id="cart-modal" class="fixed inset-0 z-[60] hidden-cart cart-overlay">
+        <!-- Backdrop -->
+        <div onclick="toggleCart()" class="absolute inset-0 bg-gray-900/20 backdrop-blur-sm transition-opacity"></div>
+        
+        <!-- Sidebar -->
+        <div class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl cart-sidebar flex flex-col">
+            <!-- Header Carrito -->
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-brand-light">
+                <h2 class="font-serif text-xl text-gray-800">Tu Carrito <span class="text-sm font-sans text-brand-primary font-bold">(<span id="cart-total-items">0</span>)</span></h2>
+                <button onclick="toggleCart()" class="text-gray-400 hover:text-red-400 transition-colors">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <!-- Items Container -->
+            <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
+                <!-- Items vacíos por defecto -->
+                <div class="text-center py-12">
+                    <i data-lucide="shopping-basket" class="w-16 h-16 text-gray-200 mx-auto mb-4"></i>
+                    <p class="text-gray-400 font-light">Tu carrito está vacío.<br>¡Agrega algo saludable!</p>
+                </div>
+            </div>
+
+            <!-- Footer Carrito -->
+            <div class="p-6 border-t border-gray-100 bg-white">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-gray-600 font-medium">Total Estimado:</span>
+                    <span id="cart-total-price" class="text-2xl font-serif text-brand-primary font-bold">$0.00</span>
+                </div>
+                <button onclick="checkoutWhatsApp()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-green-200 hover:shadow-green-300 transition-all flex items-center justify-center gap-2">
+                    <i data-lucide="message-circle" class="w-5 h-5"></i>
+                    Pedir por WhatsApp
+                </button>
+                <p class="text-xs text-center text-gray-400 mt-3 font-light">Al hacer clic, se abrirá WhatsApp con tu lista.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Inicializar Iconos
+        lucide.createIcons();
+
+        // --- DATA DE PRODUCTOS ---
+        const products = [
+            {
+                id: 1,
+                name: "Colágeno Hidrolizado",
+                price: 45.00,
+                category: "Belleza",
+                image: "https://images.unsplash.com/photo-1542037166-16886e680a82?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 2,
+                name: "Multivitamínico Mujer",
+                price: 32.50,
+                category: "Salud",
+                image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 3,
+                name: "Serum Vitamina C",
+                price: 28.00,
+                category: "Cuidado Facial",
+                image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 4,
+                name: "Omega 3 Premium",
+                price: 25.00,
+                category: "Suplementos",
+                image: "https://images.unsplash.com/photo-1550572017-edb201460391?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 5,
+                name: "Crema Hidratante Bio",
+                price: 18.90,
+                category: "Cuidado Facial",
+                image: "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 6,
+                name: "Té Verde Matcha Orgánico",
+                price: 15.00,
+                category: "Bienestar",
+                image: "https://images.unsplash.com/photo-1582793988951-9aed5509eb97?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 7,
+                name: "Biotina Cabello & Uñas",
+                price: 22.00,
+                category: "Belleza",
+                image: "https://images.unsplash.com/photo-1551241517-5781da254c7d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 8,
+                name: "Proteína Vegetal Vainilla",
+                price: 55.00,
+                category: "Suplementos",
+                image: "https://images.unsplash.com/photo-1593095817751-6d79e6027df3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+            }
+        ];
+
+        // --- ESTADO DEL CARRITO ---
+        let cart = [];
+        // Número de WhatsApp del negocio (Reemplazar con el real)
+        const BUSINESS_PHONE = "50500000000"; 
+
+        // --- RENDERIZAR PRODUCTOS ---
+        const productGrid = document.getElementById('product-grid');
+        
+        products.forEach(product => {
+            const card = document.createElement('div');
+            card.className = "bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all product-card border border-gray-50 group";
+            card.innerHTML = `
+                <div class="relative h-64 overflow-hidden">
+                    <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <button onclick="addToCart(${product.id})" class="absolute bottom-4 right-4 bg-white/90 backdrop-blur text-brand-primary p-3 rounded-full shadow-lg hover:bg-brand-primary hover:text-white transition-all transform hover:scale-110 active:scale-95">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                    </button>
+                    <span class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-gray-500 uppercase tracking-wider">${product.category}</span>
+                </div>
+                <div class="p-6">
+                    <h4 class="font-serif text-lg text-gray-800 mb-1 truncate">${product.name}</h4>
+                    <p class="text-brand-primary font-bold text-xl">$${product.price.toFixed(2)}</p>
+                </div>
+            `;
+            productGrid.appendChild(card);
+        });
+
+        // Actualizar iconos creados dinámicamente
+        lucide.createIcons();
+
+        // --- LÓGICA DEL CARRITO ---
+
+        function toggleCart() {
+            const modal = document.getElementById('cart-modal');
+            modal.classList.toggle('hidden-cart');
+        }
+
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            const existingItem = cart.find(item => item.id === id);
+
+            if (existingItem) {
+                existingItem.qty++;
+            } else {
+                cart.push({ ...product, qty: 1 });
+            }
+
+            updateCartUI();
+            
+            // Feedback visual simple (vibración botón carrito)
+            const cartBtn = document.querySelector('nav button .fa-shopping-bag');
+            // Abrir carrito automáticamente al añadir (opcional, para UX)
+            const modal = document.getElementById('cart-modal');
+            if(modal.classList.contains('hidden-cart')) toggleCart();
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            updateCartUI();
+        }
+
+        function changeQty(id, change) {
+            const item = cart.find(item => item.id === id);
+            if (item) {
+                item.qty += change;
+                if (item.qty <= 0) removeFromCart(id);
+                else updateCartUI();
+            }
+        }
+
+        function updateCartUI() {
+            const cartContainer = document.getElementById('cart-items');
+            const totalItemsEl = document.getElementById('cart-total-items');
+            const totalPriceEl = document.getElementById('cart-total-price');
+            const cartCountBadge = document.getElementById('cart-count');
+
+            // Actualizar contadores
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            totalItemsEl.textContent = totalQty;
+            cartCountBadge.textContent = totalQty;
+            
+            // Mostrar badge si hay items
+            if(totalQty > 0) cartCountBadge.classList.remove('opacity-0');
+            else cartCountBadge.classList.add('opacity-0');
+
+            totalPriceEl.textContent = `$${totalPrice.toFixed(2)}`;
+
+            // Renderizar items
+            if (cart.length === 0) {
+                cartContainer.innerHTML = `
+                    <div class="text-center py-12 flex flex-col items-center">
+                        <div class="bg-gray-50 p-4 rounded-full mb-4">
+                            <i data-lucide="shopping-basket" class="w-8 h-8 text-gray-300"></i>
+                        </div>
+                        <p class="text-gray-400 font-light">Tu carrito está vacío.</p>
+                    </div>`;
+            } else {
+                cartContainer.innerHTML = cart.map(item => `
+                    <div class="flex gap-4 items-center bg-gray-50 p-3 rounded-xl">
+                        <img src="${item.image}" class="w-16 h-16 rounded-lg object-cover bg-white" alt="${item.name}">
+                        <div class="flex-1 min-w-0">
+                            <h5 class="font-medium text-gray-800 text-sm truncate">${item.name}</h5>
+                            <p class="text-brand-primary text-sm font-bold">$${(item.price * item.qty).toFixed(2)}</p>
+                        </div>
+                        <div class="flex flex-col items-center gap-1">
+                            <button onclick="changeQty(${item.id}, 1)" class="w-6 h-6 rounded bg-white text-teal-600 flex items-center justify-center hover:bg-teal-100 shadow-sm"><i data-lucide="plus" class="w-3 h-3"></i></button>
+                            <span class="text-xs font-bold text-gray-600">${item.qty}</span>
+                            <button onclick="changeQty(${item.id}, -1)" class="w-6 h-6 rounded bg-white text-red-400 flex items-center justify-center hover:bg-red-50 shadow-sm"><i data-lucide="minus" class="w-3 h-3"></i></button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            lucide.createIcons();
+        }
+
+        // --- WHATSAPP CHECKOUT ---
+        function checkoutWhatsApp() {
+            if (cart.length === 0) {
+                alert("Agrega productos al carrito antes de pedir.");
+                return;
+            }
+
+            let message = "Hola *Bienestar Vital*, me gustaría realizar el siguiente pedido: \n\n";
+            let total = 0;
+
+            cart.forEach(item => {
+                const subtotal = item.price * item.qty;
+                message += `▪️ *${item.qty}x* ${item.name} - $${subtotal.toFixed(2)}\n`;
+                total += subtotal;
+            });
+
+            message += `\n*TOTAL: $${total.toFixed(2)}*`;
+            message += "\n\nQuedo pendiente para coordinar el pago y envío. ¡Gracias!";
+
+            const url = `https://wa.me/${BUSINESS_PHONE}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+    </script>
+</body>
+</html>
