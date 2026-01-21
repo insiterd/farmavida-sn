@@ -387,7 +387,7 @@
         // --- ESTADO DEL CARRITO ---
         let cart = [];
         // Número de WhatsApp del negocio (Reemplazar con el real)
-        const BUSINESS_PHONE = "50500000000"; 
+        const BUSINESS_PHONE = "+18292662785"; 
 
         // --- RENDERIZAR PRODUCTOS ---
         const productGrid = document.getElementById('product-grid');
@@ -508,12 +508,12 @@
                 return;
             }
 
-            let message = "Hola *Bienestar Vital*, me gustaría realizar el siguiente pedido: \n\n";
+            let message = "Hola Farmavida, me gustaría realizar el siguiente pedido: \n\n";
             let total = 0;
 
             cart.forEach(item => {
                 const subtotal = item.price * item.qty;
-                message += `▪️ *${item.qty}x* ${item.name} - $${subtotal.toFixed(2)}\n`;
+                message += `*${item.qty}x* ${item.name} - $${subtotal.toFixed(2)}\n`;
                 total += subtotal;
             });
 
